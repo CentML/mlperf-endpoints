@@ -270,6 +270,63 @@ def test_seed_in_request_payload():
 
 
 @pytest.mark.unit
+@pytest.mark.parametrize("ignore_eos", [True, False, None])
+def test_ignore_eos_in_request_payload(ignore_eos):
+    """ignore_eos is forwarded when set in query data and omitted otherwise."""
+    data = {"model": "m", "messages": [{"role": "user", "content": "Hi"}]}
+    if ignore_eos is not None:
+        data["ignore_eos"] = ignore_eos
+    request = OpenAIMsgspecAdapter.to_endpoint_request(Query(id="q", data=data))
+    payload = json.loads(msgspec.json.encode(request))
+    if ignore_eos is None:
+        assert "ignore_eos" not in payload
+    else:
+        assert payload["ignore_eos"] is ignore_eos
+
+
+@pytest.mark.unit
+def test_multimodal_tool_messages_forwarded_verbatim():
+    """Recorded image parts (with extra keys) and tool messages reach the payload unchanged."""
+    messages = [
+        {"role": "system", "content": "sys"},
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+                {
+                    "id": "c1",
+                    "type": "function",
+                    "function": {"name": "click", "arguments": "{}"},
+                }
+            ],
+        },
+        {
+            "role": "tool",
+            "tool_call_id": "c1",
+            "content": [
+                {"type": "text", "text": "ok"},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "data:image/png;base64,AAAA",
+                        "detail": "auto",
+                    },
+                    "uuid": "123",
+                },
+            ],
+        },
+    ]
+    query = Query(
+        id="q", data={"model": "m", "messages": messages, "tool_choice": "auto"}
+    )
+    payload = json.loads(
+        msgspec.json.encode(OpenAIMsgspecAdapter.to_endpoint_request(query))
+    )
+    assert payload["messages"] == messages
+    assert payload["tool_choice"] == "auto"
+
+
+@pytest.mark.unit
 @pytest.mark.parametrize(
     "field_name",
     ["reasoning", "reasoning_content"],

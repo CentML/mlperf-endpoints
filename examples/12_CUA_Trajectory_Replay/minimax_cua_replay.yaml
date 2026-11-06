@@ -1,0 +1,57 @@
+# Replay recorded H Company CUA requests (h_cua_perf) against an
+# OpenAI-compatible server. Every request is sent verbatim, in recorded order
+# per session, after its recorded think time, with its recorded output length.
+#
+# Environment overrides (defaults in brackets):
+#   CUA_DATASET   converted dataset from convert_h_cua_perf.py
+#   ENDPOINT_URL  server base URL [http://localhost:8000]
+#   CONCURRENCY   concurrently replayed sessions [2]
+#   CLIENT_WORKERS  HTTP client worker processes [-1 = auto]
+#   MODEL_NAME    served model name [MiniMaxAI/MiniMax-M3.1-Flash]
+#   TOKENIZER     tokenizer for client-side OSL/TPOT, e.g. the local model dir
+#                 [MODEL_NAME]; set it empty to skip token metrics
+#   REPORT_DIR    report output directory [logs/cua_replay]
+name: "minimax-cua-trajectory-replay"
+version: "1.0"
+type: "online"
+
+model_params:
+  name: "${MODEL_NAME:-MiniMaxAI/MiniMax-M3.1-Flash}"
+  tokenizer_name: "${TOKENIZER:-}"
+  # The trace records no sampling parameters; these are MiniMax's recommended values.
+  temperature: 1.0
+  top_p: 0.95
+  # Fallback only: every converted row carries its recorded output_length.
+  max_new_tokens: 32768
+  streaming: "on"
+
+datasets:
+  - name: h_cua_perf
+    type: performance
+    path: "${CUA_DATASET}"
+    agentic_inference:
+      turn_timeout_s: 3600.0
+      # Salt rewrites the system prompt, so the replay would no longer match the trace.
+      enable_salt: false
+      inject_tool_delay: true
+      stop_issuing_on_first_user_complete: false
+
+settings:
+  # Client-side ISL would tokenize base64 screenshots as text; read prompt
+  # tokens from the server's metrics instead.
+  metrics_isl: false
+  load_pattern:
+    type: agentic_inference
+    target_concurrency: ${CONCURRENCY:-2}
+  client:
+    num_workers: ${CLIENT_WORKERS:--1} # -1 = auto-size from available CPUs
+    worker_initialization_timeout: 300.0
+    warmup_connections: 0
+    max_idle_time: 0.5
+
+endpoint_config:
+  endpoints:
+    - "${ENDPOINT_URL:-http://localhost:8000}"
+  api_type: openai
+
+report_dir: "${REPORT_DIR:-logs/cua_replay}"

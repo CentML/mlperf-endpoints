@@ -134,6 +134,9 @@ class ChatCompletionRequest(
     chat_template_kwargs: dict[str, Any] | None = None
     tools: list[dict[str, Any]] | None = None
     tool_choice: str | dict[str, Any] | None = None
+    # vLLM/SGLang sampling extension: keep generating past EOS until
+    # max_completion_tokens, e.g. to replay recorded output lengths exactly.
+    ignore_eos: bool | None = None
 
 
 # gc=False: audit 2026-05: tool_calls set at construction; frozen=True blocks field reassignment.

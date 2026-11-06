@@ -103,6 +103,7 @@ class OpenAIMsgspecAdapter(HttpRequestAdapter):
             "logit_bias",
             "user",
             "chat_template",
+            "ignore_eos",
         ]
         return [
             ColumnFilter(required_columns=["prompt"], optional_columns=allowed),
@@ -190,6 +191,7 @@ class OpenAIMsgspecAdapter(HttpRequestAdapter):
             chat_template_kwargs=query.data.get("chat_template_kwargs"),
             tools=query.data.get("tools"),
             tool_choice=query.data.get("tool_choice"),
+            ignore_eos=query.data.get("ignore_eos"),
         )
 
     @classmethod

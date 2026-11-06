@@ -20,6 +20,8 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
+from inference_endpoint.config.schema import ModelParams
+from inference_endpoint.core.types import APIType
 from inference_endpoint.dataset_manager.agentic_inference_dataset import (
     AgenticInferenceDataset,
 )
@@ -1537,3 +1539,153 @@ def test_agentic_inference_dataset_load_with_adapter_only_raises():
     sentinel_adapter = object()
     with pytest.raises(NotImplementedError, match="api_type"):
         ds.load(adapter=sentinel_adapter)
+
+
+_IMG_PART = {
+    "type": "image_url",
+    "image_url": {"url": "data:image/png;base64,AAAA", "detail": "auto"},
+    "uuid": "123",
+}
+_TOOLS = [{"type": "function", "function": {"name": "click", "parameters": {}}}]
+_VERBATIM_TURN_1 = [
+    {"role": "system", "content": "sys"},
+    {"role": "user", "content": [{"type": "text", "text": "task"}, _IMG_PART]},
+]
+# Turn 2 rewrites turn 1's screenshot as a placeholder: history is not append-only.
+_VERBATIM_TURN_2 = [
+    {"role": "system", "content": "sys"},
+    {
+        "role": "user",
+        "content": [{"type": "text", "text": "task\n[Image omitted]"}],
+    },
+    {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+            {
+                "id": "call-1",
+                "type": "function",
+                "function": {"name": "click", "arguments": "{}"},
+            }
+        ],
+    },
+    {
+        "role": "tool",
+        "tool_call_id": "call-1",
+        "content": [{"type": "text", "text": "clicked"}, _IMG_PART],
+    },
+]
+# Turn 3 is a context-compaction call: shorter history and no tools.
+_VERBATIM_TURN_3 = [
+    {"role": "system", "content": "sys"},
+    {"role": "user", "content": [{"type": "text", "text": "summarize"}, _IMG_PART]},
+]
+
+
+def _verbatim_rows() -> list[dict]:
+    return [
+        {
+            "conversation_id": "v1",
+            "turn": 1,
+            "role": "user",
+            "content": "",
+            "messages": _VERBATIM_TURN_1,
+            "tools": _TOOLS,
+            "tool_choice": "auto",
+            "max_new_tokens": 10,
+            "ignore_eos": True,
+        },
+        {
+            "conversation_id": "v1",
+            "turn": 2,
+            "role": "user",
+            "content": "",
+            "messages": _VERBATIM_TURN_2,
+            "tools": _TOOLS,
+            "tool_choice": "auto",
+            "max_new_tokens": 20,
+            "ignore_eos": True,
+            "delay_seconds": 2.5,
+        },
+        {
+            "conversation_id": "v1",
+            "turn": 3,
+            "role": "user",
+            "content": "",
+            "messages": _VERBATIM_TURN_3,
+            "max_new_tokens": 30,
+            "ignore_eos": True,
+            "delay_seconds": 0.5,
+        },
+    ]
+
+
+@pytest.mark.unit
+def test_verbatim_conversation_sends_recorded_messages(tmp_path):
+    """Rows carrying 'messages' are replayed as recorded, without history."""
+    path = tmp_path / "verbatim.jsonl"
+    path.write_text("".join(json.dumps(r) + "\n" for r in _verbatim_rows()))
+
+    ds = AgenticInferenceDataset.load_from_file(str(path), format=DatasetFormat.JSONL)
+    ds.load(
+        api_type=APIType.OPENAI,
+        model_params=ModelParams(name="m", max_new_tokens=1024),
+    )
+
+    samples = [ds.load_sample(i) for i in range(ds.num_samples())]
+    assert [s["messages"] for s in samples] == [
+        _VERBATIM_TURN_1,
+        _VERBATIM_TURN_2,
+        _VERBATIM_TURN_3,
+    ]
+    assert [s["max_completion_tokens"] for s in samples] == [10, 20, 30]
+    assert all(s["ignore_eos"] is True for s in samples)
+    assert samples[0]["tools"] == _TOOLS and samples[1]["tools"] == _TOOLS
+    assert samples[0]["tool_choice"] == "auto"
+    # A row recorded without tools must not inherit them from turn 1.
+    assert "tools" not in samples[2]
+    assert "tool_choice" not in samples[2]
+
+    metadata = ds.conversation_metadata
+    assert metadata is not None
+    assert metadata.client_turns_per_conversation == {"v1": 3}
+    assert metadata.delay_seconds_by_key == {("v1", 2): 2.5, ("v1", 3): 0.5}
+    assert metadata.pre_built_messages_by_key[("v1", 2)] == _VERBATIM_TURN_2
+
+
+@pytest.mark.unit
+def test_verbatim_and_row_history_conversations_coexist():
+    """A verbatim conversation does not change how other conversations build history."""
+    rows = _verbatim_rows() + [
+        {"conversation_id": "r1", "turn": 1, "role": "user", "content": "hi"},
+        {"conversation_id": "r1", "turn": 2, "role": "assistant", "content": "yo"},
+        {"conversation_id": "r1", "turn": 3, "role": "user", "content": "bye"},
+    ]
+    ds = AgenticInferenceDataset(pd.DataFrame(rows))
+    ds.load()
+
+    pre_built = ds.conversation_metadata.pre_built_messages_by_key
+    assert pre_built[("v1", 3)] == _VERBATIM_TURN_3
+    assert pre_built[("r1", 3)] == [
+        {"role": "user", "content": "hi"},
+        {"role": "assistant", "content": "yo"},
+        {"role": "user", "content": "bye"},
+    ]
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize(
+    "mutate, expected_match",
+    [
+        (lambda rows: rows[1].pop("messages"), "either every row or no row"),
+        (lambda rows: rows[1].update(role="tool"), "must have role 'user'"),
+        (lambda rows: rows[0].update(messages=[]), "non-empty list of dicts"),
+        (lambda rows: rows[0].update(messages=["sys"]), "non-empty list of dicts"),
+    ],
+    ids=["mixed", "non-user-role", "empty-messages", "non-dict-message"],
+)
+def test_verbatim_conversation_validation(mutate, expected_match):
+    rows = _verbatim_rows()
+    mutate(rows)
+    with pytest.raises(InputValidationError, match=expected_match):
+        AgenticInferenceDataset(pd.DataFrame(rows))

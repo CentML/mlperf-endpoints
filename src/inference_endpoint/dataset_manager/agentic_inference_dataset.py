@@ -175,13 +175,19 @@ def _build_conversation_metadata(
 
         if role in ("user", "tool"):
             t_n = int(row["turn"])
-            current_turn_msgs: list[dict] = row_msgs
-            # Snapshot: history holds everything before this turn; create new lists
-            # so stored snapshots are not mutated by later history extensions.
-            pre_built_messages_by_key[(str_conv_id, t_n)] = (
-                list(history) + current_turn_msgs
-            )
-            history.extend(current_turn_msgs)
+            verbatim_messages = row.get("messages")
+            if isinstance(verbatim_messages, list):
+                # Verbatim row: the row already holds the complete request
+                # message list, so it is sent as-is and history is not used.
+                pre_built_messages_by_key[(str_conv_id, t_n)] = list(verbatim_messages)
+            else:
+                current_turn_msgs: list[dict] = row_msgs
+                # Snapshot: history holds everything before this turn; create new
+                # lists so stored snapshots are not mutated by later extensions.
+                pre_built_messages_by_key[(str_conv_id, t_n)] = (
+                    list(history) + current_turn_msgs
+                )
+                history.extend(current_turn_msgs)
 
             delay_val = row.get("delay_seconds")
             if delay_val is not None and not (
@@ -233,6 +239,17 @@ class AgenticInferenceDataset(Dataset, dataset_id="agentic_inference_conversatio
         - system: System prompt associated with the conversation (typically set on the first user turn)
         - model: Model name override
         - max_new_tokens / max_completion_tokens: Max tokens for this turn (alias; mapped to max_completion_tokens)
+
+    Verbatim conversations (recorded request traces):
+        When every row of a conversation carries a ``messages`` list, each row is
+        one client turn whose ``messages`` are sent exactly as recorded, without
+        history accumulation. This replays traces whose history is not
+        append-only (e.g. older screenshots replaced by placeholders, or context
+        compaction). Every row must have ``role: "user"``; ``delay_seconds``,
+        ``tools``, ``tool_choice`` and max-token fields apply per row as usual.
+
+        {"conversation_id": "c1", "turn": 1, "role": "user", "content": "", "messages": [...]}
+        {"conversation_id": "c1", "turn": 2, "role": "user", "content": "", "messages": [...], "delay_seconds": 2.4}
 
     Attributes:
         conversation_metadata: ConversationMetadata populated by load() (None before).
@@ -320,6 +337,8 @@ class AgenticInferenceDataset(Dataset, dataset_id="agentic_inference_conversatio
 
         for conv_id, group in self._conv_groups.items():
             sorted_group = group.sort_values("turn")
+            if self._validate_verbatim_conversation(conv_id, sorted_group):
+                continue
             state = "start"
             prev_assistant_had_tool_calls = False
 
@@ -453,6 +472,46 @@ class AgenticInferenceDataset(Dataset, dataset_id="agentic_inference_conversatio
                     prev_assistant_had_tool_calls = False
 
                 state = role
+
+    @staticmethod
+    def _validate_verbatim_conversation(
+        conv_id: Any, sorted_group: pd.DataFrame
+    ) -> bool:
+        """Validate a conversation whose rows carry complete ``messages`` lists.
+
+        Returns:
+            True if the conversation is verbatim and valid; False if no row
+            carries ``messages`` (regular row-history conversation).
+
+        Raises:
+            InputValidationError: If only some rows carry ``messages``, or a
+                verbatim row is not a well-formed client turn.
+        """
+        if "messages" not in sorted_group.columns:
+            return False
+        is_verbatim = sorted_group["messages"].map(lambda v: isinstance(v, list))
+        if not is_verbatim.any():
+            return False
+        if not is_verbatim.all():
+            raise InputValidationError(
+                f"Conversation {conv_id}: either every row or no row must carry "
+                "a 'messages' list"
+            )
+        for _, row in sorted_group.iterrows():
+            if row["role"] != "user":
+                raise InputValidationError(
+                    f"Conversation {conv_id} turn {row['turn']}: rows with "
+                    f"'messages' must have role 'user', got {row['role']!r}"
+                )
+            messages = row["messages"]
+            if not messages or not all(
+                isinstance(m, dict) and isinstance(m.get("role"), str) for m in messages
+            ):
+                raise InputValidationError(
+                    f"Conversation {conv_id} turn {row['turn']}: 'messages' must "
+                    "be a non-empty list of dicts with a string 'role'"
+                )
+        return True
 
     def _validate_turn_numbering(self):
         """Validate turn numbers are consecutive starting at 1.
@@ -590,6 +649,11 @@ class AgenticInferenceDataset(Dataset, dataset_id="agentic_inference_conversatio
         for row in all_rows:
             cid = row.get("conversation_id")
             if cid not in conv_defaults and row.get("role") == "user":
+                if isinstance(row.get("messages"), list):
+                    # Verbatim rows are self-contained recorded requests: a row
+                    # without 'tools' was recorded without tools.
+                    conv_defaults[cid] = {}
+                    continue
                 conv_defaults[cid] = {
                     k: row[k]
                     for k in _PROPAGATED_KEYS
