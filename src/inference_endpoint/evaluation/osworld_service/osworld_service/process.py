@@ -55,10 +55,12 @@ def terminate_process(process: subprocess.Popen) -> None:
 
 
 class CancellationToken:
+    """Cancels a run: every process attached to it is terminated, now or later."""
+
     def __init__(self) -> None:
         self._event = threading.Event()
         self._lock = threading.Lock()
-        self._process: subprocess.Popen | None = None
+        self._processes: set[subprocess.Popen] = set()
 
     def is_cancelled(self) -> bool:
         return self._event.is_set()
@@ -66,19 +68,28 @@ class CancellationToken:
     def cancel(self) -> None:
         self._event.set()
         with self._lock:
-            process = self._process
-        if process is not None:
+            processes = list(self._processes)
+        # Signal every group first, so the grace periods run concurrently.
+        for process in processes:
+            if process.poll() is None:
+                try:
+                    os.killpg(process.pid, signal.SIGTERM)
+                except ProcessLookupError:
+                    # The group exited since poll(); nothing left to signal.
+                    pass
+        for process in processes:
             terminate_process(process)
 
     def attach(self, process: subprocess.Popen) -> None:
         with self._lock:
-            self._process = process
-        if self._event.is_set():
+            self._processes.add(process)
+            cancelled = self._event.is_set()
+        if cancelled:
             terminate_process(process)
 
-    def detach(self) -> None:
+    def detach(self, process: subprocess.Popen) -> None:
         with self._lock:
-            self._process = None
+            self._processes.discard(process)
 
 
 def run_logged(
@@ -117,7 +128,7 @@ def run_logged(
                     raise RunnerError(f"timed out after {timeout_s:.0f}s: {cmd[0]}")
                 time.sleep(0.5)
         finally:
-            cancel_token.detach()
+            cancel_token.detach(process)
     if cancel_token.is_cancelled():
         raise RunCancelled("cancelled")
     return process.returncode

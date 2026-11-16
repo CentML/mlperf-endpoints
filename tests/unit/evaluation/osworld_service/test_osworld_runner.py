@@ -5,11 +5,14 @@
 ``scripts/serve.sh --use`` writes a server dir and whose ``scripts/run.sh``
 writes Harbor trial results, against a fake vLLM server."""
 
+import dataclasses
 import hashlib
 import json
 import os
 import subprocess
 import sys
+import threading
+import time
 
 import pytest
 from inference_endpoint.evaluation.osworld_service.osworld_service import (
@@ -21,6 +24,7 @@ from inference_endpoint.evaluation.osworld_service.osworld_service.config import
 )
 from inference_endpoint.evaluation.osworld_service.osworld_service.process import (
     CancellationToken,
+    RunCancelled,
     RunnerError,
 )
 from inference_endpoint.evaluation.osworld_service.osworld_service.runner import (
@@ -35,6 +39,7 @@ from tests.unit.evaluation.osworld_service.fakes import MODEL
 pytestmark = pytest.mark.unit
 
 TASKS = ["calc-035f41ba", "os-37887e8c"]
+MORE_TASKS = ["calc-42e0a640", "vlc-8ba5ae7a"]
 
 RUN_SH = """\
 #!/usr/bin/env python3
@@ -50,6 +55,15 @@ Path(os.environ["FAKE_ARGS_OUT"]).write_text(json.dumps({
 }))
 tasks = [args[i + 1] for i, a in enumerate(args) if a == "-i"]
 k = int(args[args.index("--n-attempts") + 1])
+if os.environ.get("FAKE_ARGS_LOG"):
+    with open(os.environ["FAKE_ARGS_LOG"], "a") as log:
+        log.write(json.dumps({"args": args, "pid": os.getpid()}) + "\\n")
+if os.environ.get("FAKE_FAIL_TASK") in tasks:
+    sys.exit(3)
+if os.environ.get("FAKE_BLOCK"):
+    import time
+    while True:
+        time.sleep(0.1)
 job = Path(args[args.index("--jobs-dir") + 1]) / args[args.index("--job-name") + 1]
 for t in tasks:
     for a in range(k):
@@ -100,7 +114,7 @@ def _git(repo, *args: str) -> str:
 @pytest.fixture
 def harbor_cfg(tmp_path, monkeypatch):
     repo = tmp_path / "cua-harbor"
-    for task in TASKS:
+    for task in TASKS + MORE_TASKS:
         (repo / "adapters/osworld-novm/tasks" / task).mkdir(parents=True)
     scripts = repo / "scripts"
     scripts.mkdir()
@@ -115,7 +129,8 @@ def harbor_cfg(tmp_path, monkeypatch):
     _git(repo, "add", ".")
     _git(repo, "commit", "-qm", "fake")
     monkeypatch.setenv("FAKE_ARGS_OUT", str(tmp_path / "run_args.json"))
-    monkeypatch.delenv("FAKE_ATTACH_FAIL", raising=False)
+    for name in ("FAKE_ATTACH_FAIL", "FAKE_ARGS_LOG", "FAKE_FAIL_TASK", "FAKE_BLOCK"):
+        monkeypatch.delenv(name, raising=False)
 
     image = tmp_path / "osworld.sqsh"
     image.write_bytes(b"squashfs")
@@ -305,3 +320,135 @@ class TestRun:
             runner.run(
                 _request(fake_vllm.url), tmp_path, CancellationToken(), lambda p: None
             )
+
+
+def _sharded(cfg, cap: int):
+    return dataclasses.replace(cfg, max_desktops_per_process=cap)
+
+
+def _logged_runs(path) -> list[dict]:
+    return [json.loads(line) for line in path.read_text().splitlines()]
+
+
+class TestShards:
+    ALL = TASKS + MORE_TASKS
+
+    def test_run_is_split_and_merged(
+        self, harbor_cfg, fake_vllm, tmp_path, monkeypatch
+    ):
+        cfg, commit = harbor_cfg
+        monkeypatch.setenv("FAKE_ARGS_LOG", str(tmp_path / "runs.jsonl"))
+        runner = OSWorldRunner(_sharded(cfg, 2), pinned_commit=commit)
+        run_dir = tmp_path / "run"
+        run_dir.mkdir()
+
+        result = runner.run(
+            _request(fake_vllm.url, task_ids=self.ALL, concurrency=4),
+            run_dir,
+            CancellationToken(),
+            lambda phase: None,
+        )
+
+        runs = _logged_runs(tmp_path / "runs.jsonl")
+        assert len(runs) == 2 and len({r["pid"] for r in runs}) == 2
+        by_jobs = {
+            r["args"][r["args"].index("--jobs-dir") + 1]: r["args"] for r in runs
+        }
+        assert sorted(by_jobs) == [
+            str(run_dir / "jobs" / "shard-0"),
+            str(run_dir / "jobs" / "shard-1"),
+        ]
+        shard0 = by_jobs[str(run_dir / "jobs" / "shard-0")]
+        assert [shard0[i + 1] for i, a in enumerate(shard0) if a == "-i"] == [
+            self.ALL[0],
+            self.ALL[2],
+        ]
+        assert shard0[shard0.index("-n") + 1] == "2"
+
+        # The merged result is exactly the union of the shards' trials.
+        assert result["trials_expected"] == 8
+        assert result["trials_reported"] == 8
+        assert result["shards_failed"] == []
+        shards = result["shards"]
+        assert [s["trials_reported"] for s in shards] == [4, 4]
+        assert sum(s["reward_sum"] for s in shards) == pytest.approx(4.0)
+        assert result["mean_reward"] == pytest.approx(4.0 / 8)
+        assert {t["shard"] for t in result["trials"]} == {0, 1}
+        assert result["trials_errored"] == sum(s["trials_errored"] for s in shards)
+        assert result["by_app"]["calc"] == {
+            "tasks": 2,
+            "trials_reported": 4,
+            "trials_errored": 0,
+            "mean_reward": 1.0,
+        }
+        assert result["job_dir"] == str(run_dir / "jobs")
+        assert runner.trials_completed(run_dir) == 8
+        log = (run_dir / "harbor.log").read_text()
+        assert "==== shard-0: 2 tasks, 2 desktops ====" in log
+        assert "==== shard-1: 2 tasks, 2 desktops ====" in log
+        assert not list(run_dir.glob("harbor.*.raw.log"))
+        tsv = (run_dir / "trials.tsv").read_text().splitlines()
+        assert tsv[0] == "task_id\ttrial\tshard\treward\texception" and len(tsv) == 9
+
+    def test_a_failed_shard_is_reported_and_the_others_finish(
+        self, harbor_cfg, fake_vllm, tmp_path, monkeypatch
+    ):
+        cfg, commit = harbor_cfg
+        monkeypatch.setenv("FAKE_FAIL_TASK", self.ALL[1])
+        runner = OSWorldRunner(_sharded(cfg, 2), pinned_commit=commit)
+
+        result = runner.run(
+            _request(fake_vllm.url, task_ids=self.ALL, concurrency=4),
+            tmp_path,
+            CancellationToken(),
+            lambda phase: None,
+        )
+
+        assert result["shards_failed"] == [1]
+        failed = result["shards"][1]
+        assert failed["harbor_exit_code"] == 3 and failed["trials_reported"] == 0
+        assert result["trials_reported"] == 4
+        # Shard 0 (both calc tasks) scores 4; the failed shard's 4 missing
+        # trials still count in the denominator.
+        assert result["mean_reward"] == pytest.approx(4 / 8)
+
+    def test_cancel_stops_every_shard(
+        self, harbor_cfg, fake_vllm, tmp_path, monkeypatch
+    ):
+        cfg, commit = harbor_cfg
+        runs_log = tmp_path / "runs.jsonl"
+        monkeypatch.setenv("FAKE_ARGS_LOG", str(runs_log))
+        monkeypatch.setenv("FAKE_BLOCK", "1")
+        runner = OSWorldRunner(_sharded(cfg, 1), pinned_commit=commit)
+        token = CancellationToken()
+        outcome: dict = {}
+
+        def run() -> None:
+            try:
+                runner.run(
+                    _request(fake_vllm.url, task_ids=self.ALL, concurrency=3),
+                    tmp_path,
+                    token,
+                    lambda phase: None,
+                )
+            except BaseException as exc:
+                outcome["error"] = exc
+
+        thread = threading.Thread(target=run)
+        thread.start()
+        deadline = time.monotonic() + 20
+        while time.monotonic() < deadline:
+            if runs_log.exists() and len(runs_log.read_text().splitlines()) == 3:
+                break
+            time.sleep(0.05)
+        pids = [r["pid"] for r in _logged_runs(runs_log)]
+        assert len(pids) == 3
+
+        token.cancel()
+        thread.join(20)
+
+        assert not thread.is_alive()
+        assert isinstance(outcome.get("error"), RunCancelled)
+        for pid in pids:
+            with pytest.raises(ProcessLookupError):
+                os.kill(pid, 0)

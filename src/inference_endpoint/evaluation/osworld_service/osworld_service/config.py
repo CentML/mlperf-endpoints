@@ -47,4 +47,7 @@ class HarborConfig:
     model_image_size: tuple[int, int] = (1280, 720)
     min_max_model_len: int = 131072
     run_timeout_s: int = 12 * 60 * 60
+    # Desktops per ``harbor run`` process; a run's concurrency is split over
+    # ceil(concurrency / this) processes (see ``shards.py``).
+    max_desktops_per_process: int = 16
     extra_env: dict[str, str] = field(default_factory=dict)

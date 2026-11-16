@@ -56,6 +56,12 @@ def main() -> None:
         "--work-root", required=True, help="node-local directory for desktops"
     )
     parser.add_argument(
+        "--max-desktops-per-process",
+        type=int,
+        default=16,
+        help="desktops per harbor process; a run is split into several processes",
+    )
+    parser.add_argument(
         "--skip-image-hash",
         action="store_true",
         help="do not hash the image at startup (development only)",
@@ -71,6 +77,7 @@ def main() -> None:
         model_files_dir=Path(args.model_files_dir).resolve(),
         image_sqsh=Path(args.image_sqsh).resolve(),
         work_root=Path(args.work_root).resolve(),
+        max_desktops_per_process=args.max_desktops_per_process,
     )
     runner = OSWorldRunner(harbor, verify_image=not args.skip_image_hash)
     config = ServiceConfig(

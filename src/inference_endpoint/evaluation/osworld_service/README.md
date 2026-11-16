@@ -26,6 +26,12 @@ This subproject commits its own `uv.lock`.
 - **Desktops per node.** 48 at once per exclusive CPU node ran without errors;
   16 is the scorer's default. One 84-task × 2-attempt pass takes about 21
   minutes at 16 desktops.
+- **At most 16 desktops per harbor process.** One `harbor run` process drives
+  all of its agents from one Python process, which saturates one core well
+  before the node's CPUs: on pdx, 84 tasks × 2 at 48 desktops took 21.2 minutes
+  in one process and 9.4 minutes as three processes of 16. The service splits
+  each run into `ceil(concurrency / 16)` processes
+  (`--max-desktops-per-process`), so 48 desktops run as three processes of 16.
 
 ## What it needs on the node
 
@@ -87,11 +93,21 @@ run `inference-endpoint benchmark from-config --mode both`.
    model files.
 3. **Trials.** `scripts/run.sh` with the computer-1 agent and the osworld-novm
    Enroot environment, one desktop per trial on this node, with the requested
-   attempts, turn budget and desktops at once. The sampling parameters are the
-   request's `temperature`, `top_p`, `top_k` and `max_tokens` (computer-1's
-   `max_new_tokens`); anything else is refused.
-4. **Result.** `osworld_results.json` and `trials.tsv` list every finished trial
-   with its reward and exception, plus the job directory on the service host.
+   attempts, turn budget and desktops at once. The run is split into shards
+   (`osworld_service/shards.py`): tasks go round-robin in request order, every
+   attempt of a task stays in its shard (harbor takes one `--n-attempts` per
+   process), and the desktops are split evenly. The shards run at the same time,
+   each as its own process group under `jobs/shard-<i>/`; cancelling the run
+   stops all of them, and a shard that fails is reported while the others
+   finish. The sampling parameters are the request's `temperature`, `top_p`,
+   `top_k` and `max_tokens` (computer-1's `max_new_tokens`); anything else is
+   refused.
+4. **Result.** `osworld_results.json` and `trials.tsv` merge the shards: every
+   finished trial with its shard, reward and exception, the mean reward per app,
+   and per shard its tasks, desktops, trials, reward sum, harbor exit code and
+   job directory. `shards_failed` lists shards that raised or finished fewer
+   trials than requested; their missing trials score 0. `harbor.log` holds every
+   shard's output under a header.
 
 ## API
 

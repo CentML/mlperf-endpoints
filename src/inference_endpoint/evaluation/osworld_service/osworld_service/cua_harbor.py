@@ -237,14 +237,15 @@ def harbor_env(
     return env
 
 
-def finished_trials(jobs_dir: Path) -> int:
-    return sum(1 for _ in (jobs_dir / JOB_NAME).glob("*/result.json"))
+def finished_trials(jobs_root: Path) -> int:
+    """Finished trials over every shard's job under ``jobs_root``."""
+    return sum(1 for _ in jobs_root.glob(f"*/{JOB_NAME}/*/result.json"))
 
 
-def read_trials(jobs_dir: Path) -> list[dict[str, Any]]:
-    """One record per finished trial of the job: task, reward, exception."""
+def read_trials(job_dir: Path) -> list[dict[str, Any]]:
+    """One record per finished trial of one harbor job: task, reward, exception."""
     trials: list[dict[str, Any]] = []
-    for path in sorted((jobs_dir / JOB_NAME).glob("*/result.json")):
+    for path in sorted(job_dir.glob("*/result.json")):
         try:
             record = json.loads(path.read_text())
         except (OSError, ValueError):
