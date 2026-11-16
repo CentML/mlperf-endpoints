@@ -38,7 +38,7 @@ from inference_endpoint.async_utils.services.metrics_aggregator.token_metrics im
     encode_lengths,
     load_reference_backend,
 )
-from inference_endpoint.config.schema import DatasetType, ScorerMethod, TestMode
+from inference_endpoint.config.schema import DatasetType, TestMode
 from inference_endpoint.dataset_manager.dataset import Dataset
 from inference_endpoint.evaluation import Extractor
 from inference_endpoint.evaluation.accuracy_results import (
@@ -262,10 +262,7 @@ def score_accuracy(
     for eval_cfg in eval_configs:
         try:
             scorer_kwargs = dict(eval_cfg.extras)
-            if (
-                getattr(eval_cfg.scorer, "SCORER_ID", None)
-                == ScorerMethod.SWE_BENCH.value
-            ):
+            if eval_cfg.scorer.NEEDS_ENDPOINT:
                 scorer_kwargs.update(
                     model_params=eval_cfg.model_params,
                     endpoint_config=eval_cfg.endpoint_config,

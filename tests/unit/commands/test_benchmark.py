@@ -1150,7 +1150,9 @@ class TestAccuracyOnlyDataset:
         ):
             _, eval_configs = _load_datasets(config, tmp_path, test_mode)
 
-        mock_preflight.assert_called_once_with({})
+        mock_preflight.assert_called_once_with(
+            {}, endpoint_config=config.endpoint_config
+        )
         assert len(eval_configs) == 1
         assert eval_configs[0].scorer is SWEBenchScorer
 

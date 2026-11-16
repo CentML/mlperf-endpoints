@@ -358,7 +358,10 @@ def _load_datasets(
         ds_model_params = acc_cfg.effective_generation_config(config.model_params)
         ds.load(api_type=config.endpoint_config.api_type, model_params=ds_model_params)
         logger.info(f"Loaded {ds} - {ds.num_samples()} samples")
-        scorer_cls.preflight(extras)
+        if scorer_cls.NEEDS_ENDPOINT:
+            scorer_cls.preflight(extras, endpoint_config=config.endpoint_config)
+        else:
+            scorer_cls.preflight(extras)
         # TODO add tests and defaults
         eval_configs.append(
             AccuracyConfiguration(

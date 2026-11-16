@@ -38,6 +38,7 @@ from inference_endpoint.config.schema import (
     ProfilerEngine,
     ProfilingConfig,
     RuntimeConfig,
+    ScorerMethod,
     StreamingMode,
     SubmissionReference,
     TestType,
@@ -939,6 +940,45 @@ class TestSWEBenchValidation:
         config = BenchmarkConfig(**values)
 
         assert config.endpoint_config.endpoints == ["http://endpoint:30000"]
+
+
+class TestOSWorldValidation:
+    @staticmethod
+    def _config(endpoints):
+        return {
+            "type": TestType.ONLINE,
+            "model_params": {"name": "M", "temperature": 1.0},
+            "endpoint_config": {"endpoints": endpoints},
+            "datasets": [
+                {"path": "D", "agentic_inference": {}},
+                {
+                    "name": "osworld_cua",
+                    "type": "accuracy",
+                    "accuracy_config": {
+                        "eval_method": "osworld_cua",
+                        "ground_truth": "task_id",
+                        "extras": {"osworld_service_url": "http://svc:18090"},
+                    },
+                },
+            ],
+            "settings": {
+                "load_pattern": {"type": "agentic_inference", "target_concurrency": 16}
+            },
+        }
+
+    @pytest.mark.unit
+    def test_rejects_multiple_endpoints(self):
+        values = self._config(["http://a:30000", "http://b:30000"])
+        with pytest.raises(ValidationError, match="osworld_cua.*exactly one endpoint"):
+            BenchmarkConfig(**values)
+
+    @pytest.mark.unit
+    def test_perf_concurrency_is_not_forwarded_to_the_desktops(self):
+        config = BenchmarkConfig(**self._config(["http://a:30000"]))
+        acc = next(d for d in config.datasets if d.type == DatasetType.ACCURACY)
+        assert acc.accuracy_config is not None
+        assert acc.accuracy_config.eval_method == ScorerMethod.OSWORLD_CUA
+        assert acc.accuracy_config.extras == {"osworld_service_url": "http://svc:18090"}
 
 
 class TestAgenticInferenceTotalSamples:

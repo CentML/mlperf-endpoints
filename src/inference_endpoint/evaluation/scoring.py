@@ -74,6 +74,9 @@ class Scorer(ABC):
     REQUIRES_EXTRACTOR: ClassVar[bool] = True
     SKIP_ENDPOINT_PHASE: ClassVar[bool] = False
     """Whether scoring is performed externally instead of on endpoint outputs."""
+    NEEDS_ENDPOINT: ClassVar[bool] = False
+    """Whether the scorer is constructed with ``model_params`` and
+    ``endpoint_config`` (an external service that queries the endpoint itself)."""
 
     def __init_subclass__(
         cls,
@@ -124,8 +127,13 @@ class Scorer(ABC):
         return None
 
     @classmethod
-    def preflight(cls, extras: dict[str, Any]) -> None:
-        """Validate scorer dependencies before benchmark execution begins."""
+    def preflight(
+        cls, extras: dict[str, Any], endpoint_config: Any | None = None
+    ) -> None:
+        """Validate scorer dependencies before benchmark execution begins.
+
+        ``endpoint_config`` is passed to scorers that declare ``NEEDS_ENDPOINT``.
+        """
         return None
 
     def __init__(
@@ -2144,4 +2152,5 @@ class LegacyMLPerfDeepSeekR1Scorer(Scorer, scorer_id="legacy_mlperf_deepseek_r1"
 
 
 # Late import registers the extracted scorer without introducing a cycle.
+from .osworld_scorer import OSWorldScorer as OSWorldScorer  # noqa: E402
 from .swe_bench_scorer import SWEBenchScorer as SWEBenchScorer  # noqa: E402

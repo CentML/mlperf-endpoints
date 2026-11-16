@@ -53,6 +53,7 @@ class SWEBenchScorer(Scorer, scorer_id="swe_bench_scorer"):
 
     REQUIRES_EXTRACTOR: ClassVar[bool] = False
     SKIP_ENDPOINT_PHASE: ClassVar[bool] = True
+    NEEDS_ENDPOINT: ClassVar[bool] = True
     DEFAULT_SUBSET: ClassVar[str] = "verified"
     DEFAULT_SPLIT: ClassVar[str] = "test"
     DEFAULT_NUM_INSTANCES: ClassVar[int] = 100
@@ -564,7 +565,9 @@ class SWEBenchScorer(Scorer, scorer_id="swe_bench_scorer"):
         return parsed if parsed > 0 else None
 
     @classmethod
-    def preflight(cls, extras: dict[str, Any]) -> None:
+    def preflight(
+        cls, extras: dict[str, Any], endpoint_config: EndpointConfig | None = None
+    ) -> None:
         """Check the SWE-bench service before the benchmark starts."""
         try:
             options = cls._resolve_options(extras)

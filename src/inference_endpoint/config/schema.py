@@ -143,6 +143,11 @@ class ScorerMethod(str, Enum):
     BFCL_V4 = "bfcl_v4"
     LEGACY_MLPERF_DEEPSEEK_R1 = "legacy_mlperf_deepseek_r1"
     SWE_BENCH = "swe_bench_scorer"
+    OSWORLD_CUA = "osworld_cua"
+
+
+# Scorers whose external service drives the benchmark endpoint itself.
+SERVICE_SCORER_METHODS = frozenset({ScorerMethod.SWE_BENCH, ScorerMethod.OSWORLD_CUA})
 
 
 # Audit configuration; runnable test registry lives in compliance/.
@@ -1189,15 +1194,17 @@ class BenchmarkConfig(WithUpdatesMixin, BaseModel):
         if not self.model_params.name:
             raise ValueError("Required: --model-params.name [--model]")
 
-        uses_swe_bench = any(
-            dataset.accuracy_config is not None
-            and dataset.accuracy_config.eval_method == ScorerMethod.SWE_BENCH
+        service_methods = {
+            dataset.accuracy_config.eval_method
             for dataset in self.datasets
-        )
-        if uses_swe_bench and len(self.endpoint_config.endpoints) != 1:
+            if dataset.accuracy_config is not None
+            and dataset.accuracy_config.eval_method in SERVICE_SCORER_METHODS
+        }
+        if service_methods and len(self.endpoint_config.endpoints) != 1:
+            names = ", ".join(sorted(m.value for m in service_methods if m))
             raise ValueError(
-                "SWE-bench service mode supports exactly one endpoint URL; "
-                f"got {len(self.endpoint_config.endpoints)}."
+                f"Service-backed scorers ({names}) support exactly one endpoint "
+                f"URL; got {len(self.endpoint_config.endpoints)}."
             )
 
         # TODO(vir): Move API-type-specific validation out of this generic

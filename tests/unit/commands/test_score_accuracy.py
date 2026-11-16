@@ -61,6 +61,7 @@ class _FakeScorer:
     """Duck-typed scorer stand-in with no breakdown."""
 
     SKIP_ENDPOINT_PHASE = False
+    NEEDS_ENDPOINT = False
 
     def __init__(
         self, name, dataset, report_dir, extractor=None, ground_truth_column=None, **x
@@ -78,6 +79,7 @@ class _FakeScorer:
 class _FakeSWEBenchScorer(_FakeScorer):
     SCORER_ID = ScorerMethod.SWE_BENCH.value
     SKIP_ENDPOINT_PHASE = True
+    NEEDS_ENDPOINT = True
     received_kwargs: dict = {}
 
     @classmethod
@@ -87,6 +89,11 @@ class _FakeSWEBenchScorer(_FakeScorer):
     def __init__(self, *args, **kwargs):
         type(self).received_kwargs = kwargs
         super().__init__(*args, **kwargs)
+
+
+class _FakeOSWorldScorer(_FakeSWEBenchScorer):
+    SCORER_ID = ScorerMethod.OSWORLD_CUA.value
+    received_kwargs: dict = {}
 
 
 class _FakeBreakdownScorer(_FakeScorer):
@@ -250,6 +257,49 @@ class TestScoreAccuracy:
             "model_params": model_params,
             "endpoint_config": endpoint_config,
         }
+
+    def test_needs_endpoint_flag_injects_model_and_endpoint(self, tmp_path):
+        model_params = ModelParams(name="m", temperature=1.0, top_p=0.95)
+        endpoint_config = EndpointConfig(endpoints=["http://endpoint:30000"])
+        cfg = AccuracyConfiguration(
+            scorer=_FakeOSWorldScorer,  # type: ignore[arg-type]
+            extractor=None,
+            dataset_name="osworld_cua",
+            dataset=_FakeDataset(1, 0.5),  # type: ignore[arg-type]
+            report_dir=tmp_path,
+            ground_truth_column="task_id",
+            num_repeats=1,
+            extras={"osworld_service_url": "http://svc:18090"},
+            model_params=model_params,
+            endpoint_config=endpoint_config,
+        )
+
+        score_accuracy(_ctx([cfg], test_mode=config_schema.TestMode.BOTH), _RESULT)
+
+        assert _FakeOSWorldScorer.received_kwargs["model_params"] is model_params
+        assert _FakeOSWorldScorer.received_kwargs["endpoint_config"] is endpoint_config
+
+    def test_scorer_without_flag_gets_no_endpoint(self, tmp_path):
+        class _Plain(_FakeSWEBenchScorer):
+            NEEDS_ENDPOINT = False
+            received_kwargs: dict = {}
+
+        cfg = AccuracyConfiguration(
+            scorer=_Plain,  # type: ignore[arg-type]
+            extractor=None,
+            dataset_name="swe_bench",
+            dataset=_FakeDataset(1, 1.0),  # type: ignore[arg-type]
+            report_dir=tmp_path,
+            ground_truth_column=None,
+            num_repeats=1,
+            extras={},
+            model_params=ModelParams(name="m"),
+            endpoint_config=EndpointConfig(endpoints=["http://endpoint:8000"]),
+        )
+
+        score_accuracy(_ctx([cfg], test_mode=config_schema.TestMode.BOTH), _RESULT)
+
+        assert "endpoint_config" not in _Plain.received_kwargs
 
     def test_each_dataset_gets_its_own_entry(self, tmp_path):
         cfgs = [
