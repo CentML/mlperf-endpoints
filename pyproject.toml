@@ -42,6 +42,8 @@ source-exclude = [
     "inference_endpoint/evaluation/legacy_mlperf_deepseek_r1/**",
     # Isolated native uv service that owns SWE-bench Docker execution.
     "inference_endpoint/evaluation/swebench_service/**",
+    # Isolated uv service that runs OSWorld desktops through cua-harbor.
+    "inference_endpoint/evaluation/osworld_service/**",
 ]
 
 [project]
