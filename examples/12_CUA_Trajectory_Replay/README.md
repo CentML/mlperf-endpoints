@@ -104,3 +104,40 @@ TOKENIZER=<model dir> CONCURRENCY=8 REPORT_DIR=logs/cua_replay \
 prompt) and client-side ISL (it would tokenize base64 screenshots as text). Read
 prompt-token and prefix-cache totals from the server's `/metrics` before and
 after the run instead.
+
+## Task success (OSWorld)
+
+The replay itself never scores the model's answers. `minimax_cua_replay.yaml`
+also carries an `osworld_cua` accuracy dataset: with `--mode both`, after the
+performance phase ends, the
+[OSWorld service](../../src/inference_endpoint/evaluation/osworld_service/README.md)
+runs 84 OSWorld tasks (`osworld_cua_84`, a stratified sample of
+OSWorld-Verified, not the full set) twice each against the same server and
+model. The score is the mean reward over the 168 trials;
+`accuracy/accuracy_results.json` has it with a per-application breakdown and
+pass@2. The default `--mode perf` skips it.
+
+The agent sends the replay's `temperature`, `top_p` and `max_new_tokens` with
+every turn. It never sends the per-row recorded lengths or `ignore_eos`: forced
+to a fixed length, the model keeps writing past its turn and the agent would
+execute the tool calls it invents there.
+
+The model must be one cua-harbor has an entry for (Qwen3.8-27B today); the
+service's preflight refuses any other before a desktop starts.
+
+1. Start the server (`serve_minimax_vllm.sh`, or any server of a supported
+   model).
+2. In a CPU allocation on the same cluster as the server, start the OSWorld
+   service with a cua-harbor checkout at the pinned commit and the model's
+   non-weight files (see its README).
+3. Run the benchmark with the service's URL:
+
+```bash
+CUA_DATASET=datasets/h_cua_perf_endpoints.jsonl ENDPOINT_URL=http://<server>:30000 \
+MODEL_NAME=qwen3.8-27b TOKENIZER=<model dir> CONCURRENCY=16 REPORT_DIR=logs/cua_replay \
+OSWORLD_SERVICE_URL=http://<cpu node>:18090 OSWORLD_SERVICE_TOKEN=<token> \
+  inference-endpoint benchmark from-config -c minimax_cua_replay.yaml --mode both
+```
+
+`OSWORLD_ATTEMPTS`, `OSWORLD_CONCURRENCY` (desktops at once) and
+`OSWORLD_NUM_TASKS` override the defaults of 2, 16 and all 84.

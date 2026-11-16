@@ -11,6 +11,13 @@
 #   TOKENIZER     tokenizer for client-side OSL/TPOT, e.g. the local model dir
 #                 [MODEL_NAME]; set it empty to skip token metrics
 #   REPORT_DIR    report output directory [logs/cua_replay]
+#
+# OSWorld task success (only with --mode both or --mode acc; see README):
+#   OSWORLD_SERVICE_URL    OSWorld service root URL (required in those modes)
+#   OSWORLD_SERVICE_TOKEN  its auth token [none]
+#   OSWORLD_ATTEMPTS       attempts per task [2]
+#   OSWORLD_CONCURRENCY    desktops at once on the service's node [16]
+#   OSWORLD_NUM_TASKS      first N tasks of the task set [all 84]
 name: "minimax-cua-trajectory-replay"
 version: "1.0"
 type: "online"
@@ -35,6 +42,23 @@ datasets:
       enable_salt: false
       inject_tool_delay: true
       stop_issuing_on_first_user_complete: false
+  # OSWorld task success on the same server, run by the OSWorld service after
+  # the performance phase. It sends model_params' temperature, top_p and
+  # max_new_tokens with every agent turn, but never the replay's per-row
+  # output lengths or ignore_eos. Skipped by the default --mode perf.
+  - name: osworld_cua
+    type: accuracy
+    accuracy_config:
+      eval_method: osworld_cua
+      ground_truth: task_id
+      extras:
+        osworld_service_url: "${OSWORLD_SERVICE_URL:-}"
+        osworld_service_auth_token: "${OSWORLD_SERVICE_TOKEN:-}"
+        task_set: osworld_cua_84
+        num_tasks: "${OSWORLD_NUM_TASKS:-}"
+        n_attempts: "${OSWORLD_ATTEMPTS:-2}"
+        max_turns: 30
+        concurrency: "${OSWORLD_CONCURRENCY:-16}"
 
 settings:
   # Client-side ISL would tokenize base64 screenshots as text; read prompt
