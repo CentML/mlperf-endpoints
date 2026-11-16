@@ -49,3 +49,25 @@ def test_dataset_loads_the_task_set():
 def test_unknown_task_set():
     with pytest.raises(ValueError, match="Unknown OSWorld task set"):
         OSWorldCUA.generate(datasets_dir=None, task_set="osworld_all")
+
+
+def test_full_task_set_matches_selection():
+    committed = json.loads(select_tasks.FULL_TASK_SET_PATH.read_text())
+    assert committed == select_tasks.full_task_set_document(select_tasks.read_scan())
+
+
+def test_full_task_set_is_every_task_minus_the_oracle_failures():
+    rows = select_tasks.read_scan()
+    tasks = {t["task_id"] for t in select_tasks.full_task_set_document(rows)["tasks"]}
+    scanned = {r["task"] for r in rows}
+    assert set(select_tasks.FULL_EXCLUDED) <= scanned
+    assert tasks == scanned - set(select_tasks.FULL_EXCLUDED)
+    assert len(tasks) == 344
+    assert set(select_tasks.SUDO_EXCLUDED) <= set(select_tasks.FULL_EXCLUDED)
+    assert all(select_tasks.FULL_EXCLUDED.values())
+
+
+def test_dataset_loads_the_full_task_set():
+    df = OSWorldCUA.generate(datasets_dir=None, task_set="osworld_cua_full")
+    assert len(df) == 344
+    assert df["task_id"].is_unique

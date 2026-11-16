@@ -140,4 +140,5 @@ OSWORLD_SERVICE_URL=http://<cpu node>:18090 OSWORLD_SERVICE_TOKEN=<token> \
 ```
 
 `OSWORLD_ATTEMPTS`, `OSWORLD_CONCURRENCY` (desktops at once) and
-`OSWORLD_NUM_TASKS` override the defaults of 2, 16 and all 84.
+`OSWORLD_NUM_TASKS` override the defaults of 2, 16 and all 84;
+`OSWORLD_TASK_SET` picks another committed task set.

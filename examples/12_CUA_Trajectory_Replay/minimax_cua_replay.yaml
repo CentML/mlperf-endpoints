@@ -54,7 +54,7 @@ datasets:
       extras:
         osworld_service_url: "${OSWORLD_SERVICE_URL:-}"
         osworld_service_auth_token: "${OSWORLD_SERVICE_TOKEN:-}"
-        task_set: osworld_cua_84
+        task_set: "${OSWORLD_TASK_SET:-osworld_cua_84}"
         num_tasks: "${OSWORLD_NUM_TASKS:-}"
         n_attempts: "${OSWORLD_ATTEMPTS:-2}"
         max_turns: 30

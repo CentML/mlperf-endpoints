@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Deterministic selection of the ``osworld_cua_84`` task set.
+"""Deterministic selection of the ``osworld_cua_84`` and ``osworld_cua_full`` task sets.
 
 Input is ``tasks_scan.csv``: one row per task of cua-harbor's
 ``adapters/osworld-novm`` (OSWorld-Verified without a VM), with its domain,
@@ -32,7 +32,11 @@ That gives 88 tasks. ``SUDO_EXCLUDED`` then removes the 4 tasks that need
 ``sudo`` inside the desktop, which an unprivileged (rootless) desktop cannot
 grant, leaving 84.
 
-Regenerate the committed task list with::
+``osworld_cua_full`` is every task of the scan minus ``FULL_EXCLUDED``: the 17
+tasks whose oracle solution scored 0 in all 4 attempts under the rootless
+(Enroot) desktop, each with the reason found in its trial logs.
+
+Regenerate the committed task lists with::
 
     python -m inference_endpoint.dataset_manager.predefined.osworld_cua.select_tasks
 """
@@ -68,10 +72,40 @@ SUDO_EXCLUDED = (
     "os-b6781586",
 )
 
+_SUDO = "needs sudo inside the desktop; a rootless desktop maps a single uid"
+_DEVTOOLS = (
+    "locally replayed live site: the evaluator's Chrome DevTools connection"
+    " drops (socket hang up)"
+)
+FULL_EXCLUDED = {
+    "chrome-121ba48f": "live site: the Steam cart request returns 404",
+    "chrome-47543840": _DEVTOOLS,
+    "chrome-6c4c23a1": _DEVTOOLS,
+    "chrome-7f52cab9": _DEVTOOLS,
+    "chrome-9f3f70fc": _DEVTOOLS,
+    "chrome-b4f95342": "live site: the evaluator cannot load recreation.gov",
+    "chrome-cabb3bae": _DEVTOOLS,
+    "chrome-da46d875": "the oracle's own script has a Python syntax error",
+    "chrome-fc6d8143": _DEVTOOLS,
+    "multi_apps-2b9493d7": (
+        "the oracle's pkill -TERM exits 2; the rootless desktop's pgrep stand-in"
+        " also serves pkill"
+    ),
+    "multi_apps-58565672": "live site: Google Scholar answers with its bot check",
+    "multi_apps-873cafdd": _SUDO,
+    "multi_apps-e1fc0df3": _SUDO,
+    "os-5812b315": _SUDO,
+    "os-94d95f96": _SUDO,
+    "os-b6781586": _SUDO,
+    "os-e0df059f": "its setup runs sudo mkdir; " + _SUDO,
+}
+
 PACKAGE_DIR = Path(__file__).resolve().parent
 SCAN_PATH = PACKAGE_DIR / "tasks_scan.csv"
 TASK_SET_NAME = "osworld_cua_84"
 TASK_SET_PATH = PACKAGE_DIR / f"{TASK_SET_NAME}.json"
+FULL_TASK_SET_NAME = "osworld_cua_full"
+FULL_TASK_SET_PATH = PACKAGE_DIR / f"{FULL_TASK_SET_NAME}.json"
 
 
 def _stratum(row: dict[str, str], cut: tuple[int, int]) -> tuple[int, bool]:
@@ -140,10 +174,28 @@ def task_set_document(rows: Iterable[dict[str, str]]) -> dict:
     }
 
 
+def full_task_set_document(rows: Iterable[dict[str, str]]) -> dict:
+    """``osworld_cua_full``: every scanned task minus ``FULL_EXCLUDED``."""
+    return {
+        "name": FULL_TASK_SET_NAME,
+        "excluded": FULL_EXCLUDED,
+        "tasks": [
+            {"task_id": r["task"], "domain": r["domain"]}
+            for r in sorted(rows, key=lambda r: r["task"])
+            if r["task"] not in FULL_EXCLUDED
+        ],
+    }
+
+
 def main() -> None:
-    out = Path(sys.argv[1]) if len(sys.argv) > 1 else TASK_SET_PATH
-    out.write_text(json.dumps(task_set_document(read_scan()), indent=2) + "\n")
-    print(f"wrote {out}")
+    out_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else PACKAGE_DIR
+    rows = read_scan()
+    for path, document in (
+        (out_dir / TASK_SET_PATH.name, task_set_document(rows)),
+        (out_dir / FULL_TASK_SET_PATH.name, full_task_set_document(rows)),
+    ):
+        path.write_text(json.dumps(document, indent=2) + "\n")
+        print(f"wrote {path}")
 
 
 if __name__ == "__main__":

@@ -23,7 +23,7 @@ import pandas as pd
 from ...dataset import Dataset
 
 _TASK_SET_DIR = Path(__file__).resolve().parent
-TASK_SETS = ("osworld_cua_84",)
+TASK_SETS = ("osworld_cua_84", "osworld_cua_full")
 
 
 class OSWorldCUA(Dataset, dataset_id="osworld_cua"):
