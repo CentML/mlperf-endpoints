@@ -1,0 +1,365 @@
+{
+  "name": "osworld_cua_84",
+  "seed": 398,
+  "quota": {
+    "calc": 11,
+    "chrome": 8,
+    "gimp": 6,
+    "impress": 11,
+    "multi_apps": 20,
+    "os": 7,
+    "thunderbird": 6,
+    "vlc": 6,
+    "vs_code": 6,
+    "writer": 7
+  },
+  "uid_keep": {
+    "os": 3,
+    "multi_apps": 1,
+    "chrome": 1
+  },
+  "sudo_excluded": [
+    "multi_apps-e1fc0df3",
+    "os-5812b315",
+    "os-94d95f96",
+    "os-b6781586"
+  ],
+  "tasks": [
+    {
+      "task_id": "calc-035f41ba",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-0a2e43bf",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-1954cced",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-21df9241",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-4172ea6e",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-42e0a640",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-4e6fcf72",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-4f07fbe9",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-51719eea",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-51b11269",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-a9f325aa",
+      "domain": "calc"
+    },
+    {
+      "task_id": "chrome-030eeff7",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-12086550",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-2ad9387a",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-93eabf48",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-9656a811",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-99146c54",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-af630914",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-bb5e4c0d",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "gimp-2a729ded",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-554785e9",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-72f83cdc",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-7a4deb26",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-e2dd0213",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-f4aec372",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "impress-08aced46",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-2b94c692",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-3161d64e",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-358aa0a7",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-3b27600c",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-550ce7e7",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-7dbc52a6",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-986fc832",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-a53f80cd",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-af23762e",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-f23acfd2",
+      "domain": "impress"
+    },
+    {
+      "task_id": "multi_apps-02ce9a50",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-09a37c51",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-185f29bd",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-236833a3",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-2373b66a",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-2c1ebcd7",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-3c8f201a",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-5bc63fb9",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-68a25bd4",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-7f35355e",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-869de13e",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-881deb30",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-98e8e339",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-b5062e3e",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-c867c42d",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-d68204bf",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-e8172110",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-f5c13cdd",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-f7dfbef3",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "os-37887e8c",
+      "domain": "os"
+    },
+    {
+      "task_id": "os-4d117223",
+      "domain": "os"
+    },
+    {
+      "task_id": "os-5ea617a3",
+      "domain": "os"
+    },
+    {
+      "task_id": "os-f9be0997",
+      "domain": "os"
+    },
+    {
+      "task_id": "thunderbird-15c3b339",
+      "domain": "thunderbird"
+    },
+    {
+      "task_id": "thunderbird-5203d847",
+      "domain": "thunderbird"
+    },
+    {
+      "task_id": "thunderbird-9bc3cc16",
+      "domain": "thunderbird"
+    },
+    {
+      "task_id": "thunderbird-a10b69e1",
+      "domain": "thunderbird"
+    },
+    {
+      "task_id": "thunderbird-d38192b0",
+      "domain": "thunderbird"
+    },
+    {
+      "task_id": "thunderbird-dd84e895",
+      "domain": "thunderbird"
+    },
+    {
+      "task_id": "vlc-8ba5ae7a",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vlc-8d9fd4e2",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vlc-8f080098",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vlc-9195653c",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vlc-a5bbbcd5",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vlc-d06f0d4d",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vs_code-0512bb38",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-53ad5833",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-57242fad",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-70745df8",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-7aeae0e2",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-ec71221e",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "writer-0a0faba3",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-3ef2b351",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-4bcb1253",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-6f81754e",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-936321ce",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-b21acd93",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-ecc2413d",
+      "domain": "writer"
+    }
+  ]
+}

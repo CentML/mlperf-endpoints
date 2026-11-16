@@ -33,6 +33,7 @@ from .predefined.gpqa import GPQA
 from .predefined.legacy_mlperf_deepseek_r1 import LegacyMLPerfDeepSeekR1
 from .predefined.livecodebench import LiveCodeBench
 from .predefined.open_orca import OpenOrca
+from .predefined.osworld_cua import OSWorldCUA
 from .predefined.random import RandomDataset
 from .predefined.shopify_product_catalogue import (
     ShopifyProductCatalogue,
@@ -66,6 +67,7 @@ __all__ = [
     "LegacyMLPerfDeepSeekR1",
     "GPQA",
     "OpenOrca",
+    "OSWorldCUA",
     "LiveCodeBench",
     "CNNDailyMail",
     "RandomDataset",
