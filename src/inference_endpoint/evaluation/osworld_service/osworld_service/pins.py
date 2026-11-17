@@ -43,8 +43,11 @@ IMAGES: dict[str, ImagePin] = {
         ),
         sqsh_sha256="ccf67a9e235147003cd0eab3e8cc2ce2ba779ac6bbb81b6df740f92c623a4f3f",
     ),
+    # The arm64 build imported under the tag cua-harbor/osworld:0.2-arm64, with
+    # only its Enroot provenance relabelled to cua-harbor/osworld:0.2 (the tag
+    # every task.toml names), which cua-harbor's Enroot environment requires.
     "aarch64": ImagePin(
         docker_image_id="",
-        sqsh_sha256="3ca897d0a3f0abc6b2ebdeb227082361ab4653bca8061b39bc24428d091c5781",
+        sqsh_sha256="17e7b01c742b5b9df540f9d9579fa077bf7b00fc44a510ebe7daa2a3f5ff099d",
     ),
 }
