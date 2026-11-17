@@ -141,4 +141,10 @@ OSWORLD_SERVICE_URL=http://<cpu node>:18090 OSWORLD_SERVICE_TOKEN=<token> \
 
 `OSWORLD_ATTEMPTS`, `OSWORLD_CONCURRENCY` (desktops at once) and
 `OSWORLD_NUM_TASKS` override the defaults of 2, 16 and all 84;
-`OSWORLD_TASK_SET` picks another committed task set.
+`OSWORLD_TASK_SET` picks another committed task set:
+
+| Task set                   | Tasks | What it is                                                                                       |
+| -------------------------- | ----- | ------------------------------------------------------------------------------------------------ |
+| `osworld_cua_84` (default) | 84    | stratified sample of OSWorld-Verified                                                            |
+| `osworld_cua_full`         | 344   | every task whose oracle passes on a rootless desktop                                             |
+| `osworld_cua_stable200`    | 200   | full-set tasks that are neither unstable across runs, infeasible, nor known to differ on aarch64 |

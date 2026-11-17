@@ -1,0 +1,345 @@
+task_id,class,attempts,successes
+calc-01b269ae,mostly success,4,3
+calc-0326d92d,consistent fail,4,0
+calc-035f41ba,mostly fail,16,2
+calc-04d9aeaf,mostly fail,4,1
+calc-0a2e43bf,mostly fail,16,2
+calc-0bf05a7d,unstable,4,2
+calc-0cecd4f3,mostly success,4,3
+calc-12382c62,unstable,4,2
+calc-1273e544,consistent success,4,4
+calc-1334ca3e,consistent success,4,4
+calc-1954cced,unstable,16,11
+calc-1d17d234,mostly fail,4,1
+calc-1de60575,consistent success,4,4
+calc-1e8df695,consistent success,4,4
+calc-21ab7b40,mostly fail,4,1
+calc-21df9241,mostly fail,16,1
+calc-26a8440e,consistent fail,4,0
+calc-2bd59342,consistent fail,4,0
+calc-30e3e107,consistent fail,4,0
+calc-347ef137,consistent fail,4,0
+calc-357ef137,mostly success,4,3
+calc-37608790,unstable,4,2
+calc-3a7c8185,consistent fail,4,0
+calc-3aaa4e37,mostly success,4,3
+calc-4172ea6e,mostly success,16,12
+calc-4188d3a4,mostly success,4,3
+calc-42e0a640,mostly success,16,15
+calc-4de54231,consistent fail,4,0
+calc-4e6fcf72,mostly success,16,12
+calc-4f07fbe9,consistent success,16,16
+calc-51719eea,consistent fail,16,0
+calc-51b11269,consistent success,16,16
+calc-535364ea,consistent fail,4,0
+calc-6054afcb,unstable,4,2
+calc-6e99a1ad,unstable,4,2
+calc-7a4e4bc8,consistent fail,4,0
+calc-7e429b8d,mostly success,4,3
+calc-7efeb4b1,mostly success,4,3
+calc-8b1ce5f2,consistent fail,4,0
+calc-a01fbce3,consistent fail,4,0
+calc-a9f325aa,unstable,16,7
+calc-aa3a8974,consistent success,4,4
+calc-abed40dc,consistent fail,4,0
+calc-d681960f,consistent fail,4,0
+calc-eb03d19a,unstable,4,2
+calc-ecb0df7a,mostly success,4,3
+calc-f9584479,consistent fail,4,0
+chrome-030eeff7,mostly success,16,12
+chrome-06fe7178,consistent success,4,4
+chrome-0d8b7de3,consistent success,4,4
+chrome-12086550,consistent success,16,16
+chrome-1704f00f,consistent fail,4,0
+chrome-2888b4e6,consistent fail,4,0
+chrome-2ad9387a,consistent success,16,16
+chrome-2ae9ba84,unstable,4,2
+chrome-3299584d,consistent success,4,4
+chrome-35253b65,consistent success,4,4
+chrome-368d9ba4,consistent fail,4,0
+chrome-3720f614,consistent fail,4,0
+chrome-44ee5668,consistent fail,4,0
+chrome-480bcfea,consistent fail,4,0
+chrome-59155008,mostly success,4,3
+chrome-6766f2b8,consistent success,4,4
+chrome-7a5a7856,consistent success,4,4
+chrome-7b6c7e24,consistent fail,4,0
+chrome-82279c77,mostly success,4,3
+chrome-82bc8d6a,consistent fail,4,0
+chrome-93eabf48,consistent success,16,16
+chrome-9656a811,consistent success,16,16
+chrome-99146c54,consistent fail,16,0
+chrome-9f935cce,unstable,4,2
+chrome-a728a36e,consistent success,4,4
+chrome-a96b564e,unstable,4,2
+chrome-ae78f875,consistent fail,4,0
+chrome-af630914,consistent success,16,16
+chrome-b070486d,consistent success,4,4
+chrome-b7895e80,consistent fail,4,0
+chrome-bb5e4c0d,consistent success,16,16
+chrome-c1fa57f3,mostly success,4,3
+chrome-e1e75309,consistent success,4,4
+chrome-f0b971a1,unstable,4,2
+chrome-f3b19d1e,consistent success,4,4
+chrome-f5d96daf,consistent success,4,4
+chrome-f79439ad,consistent fail,4,0
+gimp-045bf3ff,consistent fail,4,0
+gimp-06ca5602,consistent success,4,4
+gimp-2a729ded,consistent fail,16,0
+gimp-2e6f678f,consistent fail,4,0
+gimp-38f48d40,consistent fail,4,0
+gimp-554785e9,unstable,16,5
+gimp-58d3eeeb,consistent fail,4,0
+gimp-5ca86c6f,consistent fail,4,0
+gimp-62f7fd55,consistent fail,4,0
+gimp-72f83cdc,mostly fail,16,3
+gimp-734d6579,consistent success,4,4
+gimp-7767eef2,consistent success,4,4
+gimp-77b8ab4d,consistent success,4,4
+gimp-7a4deb26,mostly fail,16,1
+gimp-7b7617bd,consistent success,4,4
+gimp-8ea73f6f,consistent fail,4,0
+gimp-a746add2,consistent success,4,4
+gimp-b148e375,consistent success,4,4
+gimp-d16c99dc,consistent success,4,4
+gimp-d52d6308,mostly fail,4,1
+gimp-dbbf4b99,consistent fail,4,0
+gimp-e19bd559,consistent fail,4,0
+gimp-e2dd0213,unstable,16,11
+gimp-f4aec372,mostly fail,16,4
+gimp-f723c744,mostly fail,4,1
+gimp-fbb548ca,consistent fail,4,0
+impress-04578141,consistent fail,4,0
+impress-05dd4c1d,consistent fail,4,0
+impress-08aced46,mostly success,16,15
+impress-0a211154,consistent success,4,4
+impress-0f84bef9,consistent success,4,4
+impress-15aece23,unstable,4,2
+impress-21760ecb,consistent success,4,4
+impress-2b94c692,consistent success,16,16
+impress-2cd43775,consistent success,4,4
+impress-3161d64e,mostly success,16,14
+impress-358aa0a7,mostly fail,16,2
+impress-39be0d19,mostly success,4,3
+impress-3b27600c,consistent fail,16,0
+impress-455d3c66,consistent success,4,4
+impress-4ed5abd0,consistent fail,4,0
+impress-550ce7e7,mostly success,16,12
+impress-57667013,mostly success,4,3
+impress-5c1a6c3d,mostly success,4,3
+impress-5cfb9197,mostly success,4,3
+impress-5d901039,consistent fail,4,0
+impress-70bca0cc,consistent success,4,4
+impress-73c99fb9,consistent success,4,4
+impress-7ae48c60,consistent success,4,4
+impress-7dbc52a6,mostly success,16,15
+impress-841b50aa,mostly success,4,3
+impress-8979838c,consistent success,4,4
+impress-986fc832,consistent fail,16,0
+impress-9cf05d24,consistent success,4,4
+impress-9ec204e4,mostly success,4,3
+impress-a097acff,consistent success,4,4
+impress-a434992a,mostly success,4,3
+impress-a53f80cd,mostly fail,16,1
+impress-a669ef01,mostly fail,4,1
+impress-ac1b39ff,consistent success,4,4
+impress-ac9bb6cb,consistent fail,4,0
+impress-af23762e,consistent success,16,16
+impress-af2d657a,consistent success,4,4
+impress-b8adbc24,mostly fail,4,1
+impress-bf4e9888,consistent fail,4,0
+impress-c59742c0,consistent fail,4,0
+impress-c82632a4,consistent success,4,4
+impress-ce88f674,consistent success,4,4
+impress-e4ef0baf,unstable,4,2
+impress-ed43c15f,unstable,4,2
+impress-edb61b14,consistent success,4,4
+impress-ef9d12bd,consistent success,4,4
+impress-f23acfd2,mostly fail,16,3
+multi_apps-00fa164e,consistent fail,4,0
+multi_apps-02ce9a50,mostly success,16,13
+multi_apps-09a37c51,consistent fail,16,0
+multi_apps-0e5303d4,consistent fail,4,0
+multi_apps-185f29bd,consistent fail,16,0
+multi_apps-1f18aa87,consistent fail,4,0
+multi_apps-20236825,consistent fail,4,0
+multi_apps-227d2f97,unstable,4,2
+multi_apps-236833a3,consistent fail,16,0
+multi_apps-2373b66a,consistent success,16,16
+multi_apps-26150609,consistent fail,4,0
+multi_apps-26660ad1,consistent success,4,4
+multi_apps-2c1ebcd7,consistent fail,16,0
+multi_apps-2c9fc0de,consistent success,4,4
+multi_apps-2fe4b718,consistent fail,4,0
+multi_apps-337d318b,consistent fail,4,0
+multi_apps-36037439,unstable,4,2
+multi_apps-3680a5ee,consistent fail,4,0
+multi_apps-3a93cae4,mostly success,4,3
+multi_apps-3c8f201a,mostly fail,16,3
+multi_apps-3e3fc409,consistent fail,4,0
+multi_apps-3f05f3b9,mostly success,4,3
+multi_apps-415ef462,consistent fail,4,0
+multi_apps-42d25c08,consistent fail,4,0
+multi_apps-42f4d1c7,consistent fail,4,0
+multi_apps-47f7c0ce,unstable,4,2
+multi_apps-48c46dc7,mostly fail,4,1
+multi_apps-48d05431,mostly success,4,3
+multi_apps-4c26e3f3,mostly fail,4,1
+multi_apps-510f64c8,consistent fail,4,0
+multi_apps-51f5801c,mostly success,4,3
+multi_apps-5990457f,consistent fail,4,0
+multi_apps-5bc63fb9,unstable,16,9
+multi_apps-5df7b33a,consistent fail,4,0
+multi_apps-67890eb6,consistent fail,4,0
+multi_apps-68a25bd4,mostly fail,16,4
+multi_apps-69acbb55,consistent fail,4,0
+multi_apps-6d72aad6,consistent fail,4,0
+multi_apps-6f4073b8,consistent fail,4,0
+multi_apps-716a6079,unstable,4,2
+multi_apps-74d5859f,consistent fail,4,0
+multi_apps-778efd0a,consistent fail,4,0
+multi_apps-788b3701,mostly success,4,3
+multi_apps-7e287123,consistent fail,4,0
+multi_apps-7f35355e,mostly fail,16,4
+multi_apps-7ff48d5b,consistent fail,4,0
+multi_apps-81c425f5,unstable,4,2
+multi_apps-82e3c869,mostly fail,4,1
+multi_apps-869de13e,mostly fail,16,1
+multi_apps-881deb30,consistent fail,16,0
+multi_apps-8df7e444,mostly success,4,3
+multi_apps-8e116af7,consistent fail,4,0
+multi_apps-91190194,unstable,4,2
+multi_apps-9219480b,unstable,4,2
+multi_apps-937087b6,consistent fail,4,0
+multi_apps-98e8e339,unstable,16,5
+multi_apps-9f3bb592,mostly success,4,3
+multi_apps-a503b07f,consistent success,4,4
+multi_apps-a74b607e,consistent success,4,4
+multi_apps-a82b78bb,consistent fail,4,0
+multi_apps-aad10cd7,consistent fail,4,0
+multi_apps-acb0f96b,mostly success,4,3
+multi_apps-aceb0368,consistent fail,4,0
+multi_apps-b337d106,mostly success,4,3
+multi_apps-b5062e3e,consistent fail,16,0
+multi_apps-bb83cab4,consistent fail,4,0
+multi_apps-bc2b57f3,consistent fail,4,0
+multi_apps-c2751594,consistent fail,4,0
+multi_apps-c7c1e4c3,consistent fail,4,0
+multi_apps-c867c42d,unstable,16,10
+multi_apps-ce2b64a2,mostly fail,4,1
+multi_apps-d1acdb87,consistent fail,4,0
+multi_apps-d68204bf,unstable,16,10
+multi_apps-d9b7c649,consistent fail,4,0
+multi_apps-da52d699,consistent fail,4,0
+multi_apps-da922383,mostly fail,4,1
+multi_apps-dd60633f,consistent fail,4,0
+multi_apps-deec51c9,consistent fail,4,0
+multi_apps-df67aebb,consistent fail,4,0
+multi_apps-e135df7c,mostly success,4,3
+multi_apps-e2392362,consistent fail,4,0
+multi_apps-e8172110,consistent fail,16,0
+multi_apps-eb303e01,consistent fail,4,0
+multi_apps-ee9a3c83,consistent fail,4,0
+multi_apps-f5c13cdd,unstable,16,9
+multi_apps-f7dfbef3,consistent fail,16,0
+multi_apps-f8369178,consistent fail,4,0
+multi_apps-f8cfa149,consistent success,4,4
+multi_apps-f918266a,mostly success,4,3
+os-13584542,consistent fail,4,0
+os-23393935,unstable,4,2
+os-28cc3b7e,consistent success,4,4
+os-37887e8c,consistent success,16,16
+os-3ce045a0,consistent fail,4,0
+os-4127319a,consistent success,4,4
+os-4783cc41,consistent fail,4,0
+os-4d117223,consistent success,16,16
+os-5c1075ca,consistent success,4,4
+os-5ced85fc,consistent success,4,4
+os-5ea617a3,consistent success,16,16
+os-6f56bf42,consistent success,4,4
+os-a462a795,consistent fail,4,0
+os-a4d98375,consistent success,4,4
+os-b3d4a89c,consistent fail,4,0
+os-bedcedc4,consistent success,4,4
+os-c288e301,consistent fail,4,0
+os-ec4e3f68,consistent success,4,4
+os-f9be0997,consistent success,16,16
+os-fe41f596,consistent fail,4,0
+thunderbird-08c73485,consistent fail,4,0
+thunderbird-10a730d5,consistent success,4,4
+thunderbird-15c3b339,consistent success,16,16
+thunderbird-3f28fe4f,consistent success,4,4
+thunderbird-3f49d2cc,mostly fail,4,1
+thunderbird-5203d847,consistent success,16,16
+thunderbird-7b1e1ff9,mostly fail,4,1
+thunderbird-9b7bc335,mostly success,4,3
+thunderbird-9bc3cc16,mostly fail,16,3
+thunderbird-a10b69e1,consistent success,16,16
+thunderbird-a1af9f1c,consistent fail,4,0
+thunderbird-d38192b0,consistent success,16,16
+thunderbird-dd84e895,mostly success,16,15
+thunderbird-dfac9ee8,consistent success,4,4
+thunderbird-f201fbc3,mostly success,4,3
+vlc-215dfd39,mostly success,4,3
+vlc-386dbd0e,mostly success,4,3
+vlc-59f21cfb,consistent success,4,4
+vlc-5ac2891a,mostly success,4,3
+vlc-7882ed6e,consistent fail,4,0
+vlc-8ba5ae7a,unstable,16,11
+vlc-8d9fd4e2,consistent success,16,16
+vlc-8f080098,mostly fail,16,0
+vlc-9195653c,unstable,16,7
+vlc-a5bbbcd5,consistent success,16,16
+vlc-aa4b5023,unstable,4,2
+vlc-bba3381f,consistent success,4,4
+vlc-cb130f0d,consistent fail,4,0
+vlc-d06f0d4d,consistent fail,16,0
+vlc-efcf0d81,mostly success,4,3
+vlc-f3977615,mostly success,4,3
+vlc-fba2c100,consistent success,4,4
+vs_code-0512bb38,consistent success,16,16
+vs_code-0ed39f63,mostly success,4,3
+vs_code-276cc624,consistent success,4,4
+vs_code-4e60007a,consistent success,4,4
+vs_code-53ad5833,mostly success,16,14
+vs_code-57242fad,consistent success,16,16
+vs_code-5e2d93d8,consistent success,4,4
+vs_code-6ed0a554,consistent success,4,4
+vs_code-70745df8,consistent success,16,16
+vs_code-7aeae0e2,consistent fail,16,0
+vs_code-7c4cc09e,consistent fail,4,0
+vs_code-847a96b6,consistent fail,4,0
+vs_code-930fdb3b,consistent fail,4,0
+vs_code-9439a27b,consistent fail,4,0
+vs_code-971cbb5b,consistent fail,4,0
+vs_code-982d12a5,consistent success,4,4
+vs_code-9d425400,consistent success,4,4
+vs_code-c6bf789c,consistent success,4,4
+vs_code-dcbe20e8,consistent fail,4,0
+vs_code-e2b5e914,consistent fail,4,0
+vs_code-ea98c5d7,consistent fail,4,0
+vs_code-eabc805a,consistent success,4,4
+vs_code-ec71221e,unstable,16,6
+writer-0810415c,mostly success,4,3
+writer-0a0faba3,mostly fail,16,4
+writer-0b17a146,consistent success,4,4
+writer-0e47de2a,consistent success,4,4
+writer-0e763496,consistent success,4,4
+writer-3ef2b351,consistent success,16,16
+writer-4bcb1253,consistent success,16,16
+writer-66399b0d,consistent success,4,4
+writer-6a33f9b9,consistent success,4,4
+writer-6ada715d,consistent fail,4,0
+writer-6f81754e,consistent fail,16,0
+writer-72b810ef,consistent success,4,4
+writer-8472fece,mostly success,4,3
+writer-88fe4b2d,consistent fail,4,0
+writer-936321ce,unstable,16,5
+writer-adf5e2c3,unstable,4,2
+writer-b21acd93,mostly success,16,12
+writer-bb8ccc78,consistent fail,4,0
+writer-d53ff5ee,mostly success,4,3
+writer-e246f6d8,consistent success,4,4
+writer-e528b65e,consistent success,4,4
+writer-ecc2413d,consistent success,16,16
+writer-f178a4a9,mostly success,4,3

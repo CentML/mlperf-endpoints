@@ -1,0 +1,891 @@
+{
+  "name": "osworld_cua_stable200",
+  "seed": 719,
+  "target": 200,
+  "excluded_unstable": [
+    "calc-0bf05a7d",
+    "calc-12382c62",
+    "calc-1954cced",
+    "calc-37608790",
+    "calc-6054afcb",
+    "calc-6e99a1ad",
+    "calc-a9f325aa",
+    "calc-eb03d19a",
+    "chrome-2ae9ba84",
+    "chrome-9f935cce",
+    "chrome-a96b564e",
+    "chrome-f0b971a1",
+    "gimp-554785e9",
+    "gimp-e2dd0213",
+    "impress-15aece23",
+    "impress-e4ef0baf",
+    "impress-ed43c15f",
+    "multi_apps-227d2f97",
+    "multi_apps-36037439",
+    "multi_apps-47f7c0ce",
+    "multi_apps-5bc63fb9",
+    "multi_apps-716a6079",
+    "multi_apps-81c425f5",
+    "multi_apps-91190194",
+    "multi_apps-9219480b",
+    "multi_apps-98e8e339",
+    "multi_apps-c867c42d",
+    "multi_apps-d68204bf",
+    "multi_apps-f5c13cdd",
+    "os-23393935",
+    "vlc-8ba5ae7a",
+    "vlc-9195653c",
+    "vlc-aa4b5023",
+    "vs_code-ec71221e",
+    "writer-936321ce",
+    "writer-adf5e2c3"
+  ],
+  "excluded_infeasible": [
+    "calc-2bd59342",
+    "chrome-3720f614",
+    "chrome-480bcfea",
+    "chrome-ae78f875",
+    "gimp-045bf3ff",
+    "gimp-2e6f678f",
+    "gimp-38f48d40",
+    "gimp-58d3eeeb",
+    "gimp-5ca86c6f",
+    "gimp-62f7fd55",
+    "gimp-8ea73f6f",
+    "gimp-e19bd559",
+    "gimp-fbb548ca",
+    "multi_apps-6d72aad6",
+    "os-4783cc41",
+    "os-a462a795",
+    "os-b3d4a89c",
+    "os-c288e301",
+    "os-fe41f596",
+    "thunderbird-a1af9f1c",
+    "vlc-7882ed6e",
+    "vlc-cb130f0d",
+    "vs_code-7c4cc09e",
+    "vs_code-847a96b6",
+    "vs_code-971cbb5b",
+    "vs_code-dcbe20e8",
+    "writer-bb8ccc78"
+  ],
+  "excluded_arch": {
+    "chrome-3299584d": "its setup runs apt at task time; the aarch64 image's runtime apt sources are live ports.ubuntu.com, the x86_64 image's a fixed snapshot",
+    "chrome-6766f2b8": "its setup runs apt at task time; the aarch64 image's runtime apt sources are live ports.ubuntu.com, the x86_64 image's a fixed snapshot",
+    "chrome-9656a811": "its setup runs apt at task time; the aarch64 image's runtime apt sources are live ports.ubuntu.com, the x86_64 image's a fixed snapshot",
+    "multi_apps-2373b66a": "its setup runs apt at task time; the aarch64 image's runtime apt sources are live ports.ubuntu.com, the x86_64 image's a fixed snapshot",
+    "multi_apps-716a6079": "its setup runs apt at task time; the aarch64 image's runtime apt sources are live ports.ubuntu.com, the x86_64 image's a fixed snapshot",
+    "multi_apps-a74b607e": "its setup runs apt at task time; the aarch64 image's runtime apt sources are live ports.ubuntu.com, the x86_64 image's a fixed snapshot",
+    "chrome-44ee5668": "the no-op agent passes on aarch64 (0 on x86_64): the YouTube entries its setup seeds into Chrome's history are not there when the verifier reads it",
+    "multi_apps-69acbb55": "its oracle pip-installs torch==2.2.2+cpu, which has no aarch64 wheel; the oracle failed in 2 of 2 aarch64 attempts and passes on x86_64",
+    "multi_apps-02ce9a50": "its verifier OCRs a screenshot with easyocr, whose quantized recognizer runs on a different torch engine on aarch64 (QNNPACK) than on x86_64 (fbgemm)"
+  },
+  "class_mix": {
+    "consistent fail": 71,
+    "consistent success": 75,
+    "mostly fail": 20,
+    "mostly success": 34
+  },
+  "tasks": [
+    {
+      "task_id": "calc-01b269ae",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-0cecd4f3",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-1273e544",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-1334ca3e",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-1d17d234",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-21ab7b40",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-21df9241",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-26a8440e",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-357ef137",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-3a7c8185",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-4172ea6e",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-4188d3a4",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-42e0a640",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-4de54231",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-4f07fbe9",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-51719eea",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-51b11269",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-535364ea",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-7a4e4bc8",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-7e429b8d",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-7efeb4b1",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-a01fbce3",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-aa3a8974",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-abed40dc",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-d681960f",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-ecb0df7a",
+      "domain": "calc"
+    },
+    {
+      "task_id": "calc-f9584479",
+      "domain": "calc"
+    },
+    {
+      "task_id": "chrome-030eeff7",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-0d8b7de3",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-12086550",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-1704f00f",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-2888b4e6",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-2ad9387a",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-35253b65",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-7a5a7856",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-7b6c7e24",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-82279c77",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-93eabf48",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-99146c54",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-a728a36e",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-af630914",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-b070486d",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-b7895e80",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-bb5e4c0d",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-c1fa57f3",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-e1e75309",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-f3b19d1e",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-f5d96daf",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "chrome-f79439ad",
+      "domain": "chrome"
+    },
+    {
+      "task_id": "gimp-06ca5602",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-2a729ded",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-72f83cdc",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-734d6579",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-7767eef2",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-77b8ab4d",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-7a4deb26",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-7b7617bd",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-a746add2",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-b148e375",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-d16c99dc",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-d52d6308",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-dbbf4b99",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-f4aec372",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "gimp-f723c744",
+      "domain": "gimp"
+    },
+    {
+      "task_id": "impress-04578141",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-05dd4c1d",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-08aced46",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-358aa0a7",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-39be0d19",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-3b27600c",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-57667013",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-5c1a6c3d",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-5cfb9197",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-5d901039",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-73c99fb9",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-7ae48c60",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-841b50aa",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-8979838c",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-986fc832",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-a097acff",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-a434992a",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-a53f80cd",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-ac1b39ff",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-ac9bb6cb",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-af23762e",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-af2d657a",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-c59742c0",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-c82632a4",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-ce88f674",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-edb61b14",
+      "domain": "impress"
+    },
+    {
+      "task_id": "impress-ef9d12bd",
+      "domain": "impress"
+    },
+    {
+      "task_id": "multi_apps-00fa164e",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-09a37c51",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-0e5303d4",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-185f29bd",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-1f18aa87",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-20236825",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-236833a3",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-26150609",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-26660ad1",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-2c1ebcd7",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-337d318b",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-3680a5ee",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-3a93cae4",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-3c8f201a",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-3e3fc409",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-415ef462",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-42d25c08",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-42f4d1c7",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-48d05431",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-4c26e3f3",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-510f64c8",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-51f5801c",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-5990457f",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-5df7b33a",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-67890eb6",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-68a25bd4",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-6f4073b8",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-74d5859f",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-7e287123",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-7f35355e",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-8e116af7",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-937087b6",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-9f3bb592",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-a503b07f",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-a82b78bb",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-acb0f96b",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-b5062e3e",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-bb83cab4",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-c7c1e4c3",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-ce2b64a2",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-d1acdb87",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-d9b7c649",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-da52d699",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-da922383",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-deec51c9",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-df67aebb",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-e2392362",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-e8172110",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-f7dfbef3",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-f8369178",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-f8cfa149",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "multi_apps-f918266a",
+      "domain": "multi_apps"
+    },
+    {
+      "task_id": "os-13584542",
+      "domain": "os"
+    },
+    {
+      "task_id": "os-28cc3b7e",
+      "domain": "os"
+    },
+    {
+      "task_id": "os-37887e8c",
+      "domain": "os"
+    },
+    {
+      "task_id": "os-3ce045a0",
+      "domain": "os"
+    },
+    {
+      "task_id": "os-4127319a",
+      "domain": "os"
+    },
+    {
+      "task_id": "os-4d117223",
+      "domain": "os"
+    },
+    {
+      "task_id": "os-5c1075ca",
+      "domain": "os"
+    },
+    {
+      "task_id": "os-5ced85fc",
+      "domain": "os"
+    },
+    {
+      "task_id": "os-5ea617a3",
+      "domain": "os"
+    },
+    {
+      "task_id": "os-6f56bf42",
+      "domain": "os"
+    },
+    {
+      "task_id": "os-bedcedc4",
+      "domain": "os"
+    },
+    {
+      "task_id": "os-ec4e3f68",
+      "domain": "os"
+    },
+    {
+      "task_id": "thunderbird-10a730d5",
+      "domain": "thunderbird"
+    },
+    {
+      "task_id": "thunderbird-15c3b339",
+      "domain": "thunderbird"
+    },
+    {
+      "task_id": "thunderbird-3f28fe4f",
+      "domain": "thunderbird"
+    },
+    {
+      "task_id": "thunderbird-7b1e1ff9",
+      "domain": "thunderbird"
+    },
+    {
+      "task_id": "thunderbird-9b7bc335",
+      "domain": "thunderbird"
+    },
+    {
+      "task_id": "thunderbird-9bc3cc16",
+      "domain": "thunderbird"
+    },
+    {
+      "task_id": "thunderbird-a10b69e1",
+      "domain": "thunderbird"
+    },
+    {
+      "task_id": "thunderbird-dfac9ee8",
+      "domain": "thunderbird"
+    },
+    {
+      "task_id": "thunderbird-f201fbc3",
+      "domain": "thunderbird"
+    },
+    {
+      "task_id": "vlc-386dbd0e",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vlc-59f21cfb",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vlc-5ac2891a",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vlc-8d9fd4e2",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vlc-8f080098",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vlc-a5bbbcd5",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vlc-bba3381f",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vlc-d06f0d4d",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vlc-efcf0d81",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vlc-f3977615",
+      "domain": "vlc"
+    },
+    {
+      "task_id": "vs_code-0512bb38",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-0ed39f63",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-4e60007a",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-53ad5833",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-57242fad",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-5e2d93d8",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-6ed0a554",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-70745df8",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-7aeae0e2",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-930fdb3b",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-982d12a5",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-c6bf789c",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "vs_code-ea98c5d7",
+      "domain": "vs_code"
+    },
+    {
+      "task_id": "writer-0a0faba3",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-0b17a146",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-3ef2b351",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-4bcb1253",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-66399b0d",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-6ada715d",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-6f81754e",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-72b810ef",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-8472fece",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-88fe4b2d",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-e246f6d8",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-e528b65e",
+      "domain": "writer"
+    },
+    {
+      "task_id": "writer-ecc2413d",
+      "domain": "writer"
+    }
+  ]
+}
